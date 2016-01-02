@@ -49,9 +49,10 @@ NEWSPIDER_MODULE = 'leadScrapy.spiders'
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'leadScrapy.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    #'leadScrapy.middlewares.MyCustomDownloaderMiddleware': 543,
+    'leadScrapy.middlewares.IngoreHttpRequestMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -61,9 +62,11 @@ NEWSPIDER_MODULE = 'leadScrapy.spiders'
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'leadScrapy.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+    #'leadScrapy.pipelines.SomePipeline': 300,
+	'leadScrapy.pipelines.LeadscrapyPipeline': 800,
+	'leadScrapy.pipelines.FilterUrlPipline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html

@@ -6,9 +6,22 @@
 # http://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+class DetailedItem(scrapy.Item):
+	url = scrapy.Field()
+	name = scrapy.Field()
+	phone = scrapy.Field()
+	address = scrapy.Field()
+	date = scrapy.Field()
 
+class LeadItem(scrapy.Item):
+	phone = scrapy.Field()
+	address = scrapy.Field()
+	date = scrapy.Field()
+	url = scrapy.Field()
+	
+class BasicItem(scrapy.Item):
+	name = scrapy.Field()
+	phone = scrapy.Field()
 
-class LeadscrapyItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class TestItem(scrapy.Item):
+	url = scrapy.Field()
