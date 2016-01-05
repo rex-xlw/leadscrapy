@@ -3,4 +3,3 @@ cd
 cd app-root/repo/Utils
 PATH=$PATH:/usr/local/bin
 export PATH
-python sendSMS.py
