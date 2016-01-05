@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 import os
+
 """
 #redis Verison
 import redis
@@ -29,9 +32,6 @@ def isUrlExist(url):
 	ele = {"url":url}
 	for flag in urlCol.find(ele):
 		isExist = True
-	if isExist ==  True:
-		print url
-		pause = raw_input("PAUSE")
 	return isExist
 
 def insertIntoDB(url):

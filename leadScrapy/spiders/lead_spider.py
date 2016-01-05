@@ -1,6 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import scrapy
-import urllib2
-import os
 import re
 import time
 
