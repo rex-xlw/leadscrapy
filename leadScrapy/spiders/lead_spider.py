@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import scrapy
+import urllib2
+import os
 import re
 import time
-
+import sys
+sys.path.append("..")
 from scrapy.spiders import CrawlSpider,Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
 from scrapy.http import Request
 from leadScrapy.items import LeadItem
+from scrapy.xlib.pydispatch import dispatcher
+from scrapy import signals
+import leadScrapy.database_execution
 
 MAXIMUMPAGE = 300
 
@@ -22,10 +27,10 @@ class LeadSpider(CrawlSpider):
 		"www.homesbyowner.com",
 		]
 	start_urls = [
-		"http://www.homesbyowner.com",
-		"http://www.owners.com/search",
+		#"http://www.homesbyowner.com",
+		#"http://www.owners.com/search",
 		"http://www.isoldmyhouse.com/browse/",
-		"http://www.forsalebyowner.com/homes-for-sale",
+		#"http://www.forsalebyowner.com/homes-for-sale",
 	]
 	
 	pattern1 = re.compile(r'\(\d{3}\)\s\d{3}-\d{4}')
@@ -168,19 +173,48 @@ class LeadSpider(CrawlSpider):
 			),
 		)
 	
+	
+	def __init__(self):
+		super(LeadSpider, self).__init__() 
+		#dispatcher.connect(self.spider_opened, signals.spider_opened)
+		dispatcher.connect(self.spider_closed, signals.spider_closed)
+	'''
+	def spider_opened(self, spider):
+		print 555555
+		pause = raw_input("PAUSE")
+	'''
+	
+	def spider_closed(self, spider):
+		print "All data crawl Finish!"
+		print "Closing Spider..."
+		print "Closing Database..."
+		leadScrapy.database_execution.dispose()
+		print "Database closed succeed..."
+	
+
 	def parse_homesbyowner_lead(self, response):
 		item = LeadItem()
 		nowTime = time.localtime()
 		phone = response.xpath('//div[@class="options"]/p/strong/text()').extract()
 		addressList = response.xpath('//p[@class="address"]/text()').extract()
-		date = str(nowTime[0]) + str(nowTime[1]) + str(nowTime[2])
+		
+		year = str(nowTime[0])
+		if nowTime[1] < 10:
+			month = "0" + str(nowTime[1])
+		else:
+			month = str(nowTime[1])
+		if nowTime[2] < 10:
+			day = "0" + str(nowTime[2])
+		else:
+			day = str(nowTime[2])
+		date = year + month + day
 
 		resultPhone = []
 		resultAddress = []
 		resultDate = []
 
 		for phoneItem in phone:
-			phoneItem = phoneItem.replace('(','').replace(')','').replace('-','').replace(' ','')
+			phoneItem = phoneItem.replace('(','').replace(')','').replace('-','').replace(' ','').replace('.', '')
 			phoneItem = phoneItem[:10]
 			resultPhone.append(phoneItem)
 
@@ -200,7 +234,17 @@ class LeadSpider(CrawlSpider):
 		phoneList = response.xpath('//div[@class="info"]/div/text()').extract()
 		addressLine1 = response.xpath('//div[@class="f-left"]/h1/text()').extract()
 		addressLine2 = response.xpath('//div[@class="f-left"]/h2/text()').extract()
-		date = str(nowTime[0]) + str(nowTime[1]) + str(nowTime[2])
+		
+		year = str(nowTime[0])
+		if nowTime[1] < 10:
+			month = "0" + str(nowTime[1])
+		else:
+			month = str(nowTime[1])
+		if nowTime[2] < 10:
+			day = "0" + str(nowTime[2])
+		else:
+			day = str(nowTime[2])
+		date = year + month + day
 
 		resultPhone = []
 		resultAddress = []
@@ -208,7 +252,7 @@ class LeadSpider(CrawlSpider):
 
 
 		for phoneItem in phoneList:
-			phoneItem = phoneItem.replace('(','').replace(')','').replace('-','').replace(' ','')
+			phoneItem = phoneItem.replace('(','').replace(')','').replace('-','').replace(' ','').replace('.', '')
 			phoneItem = phoneItem[:10]
 			resultPhone.append(phoneItem)
 		
@@ -230,7 +274,17 @@ class LeadSpider(CrawlSpider):
 		phoneContent = ""
 		phoneContentList = response.xpath('//div[@class="content"]/p/text()').extract()
 		address = response.xpath('//div[@class="details-address"]/text()').extract()
-		date = str(nowTime[0]) + str(nowTime[1]) + str(nowTime[2])
+		
+		year = str(nowTime[0])
+		if nowTime[1] < 10:
+			month = "0" + str(nowTime[1])
+		else:
+			month = str(nowTime[1])
+		if nowTime[2] < 10:
+			day = "0" + str(nowTime[2])
+		else:
+			day = str(nowTime[2])
+		date = year + month + day
 
 		resultPhone = []
 		resultAddress = []
@@ -248,19 +302,20 @@ class LeadSpider(CrawlSpider):
 		phoneList = phonePattern1 + phonePattern2 + phonePattern3 + phonePattern4 + phonePattern5
 
 		for phoneItem in phoneList:
-			phoneItem = phoneItem.replace('(','').replace(')','').replace('-','').replace(' ','')
+			phoneItem = phoneItem.replace("(","").replace(")","").replace("-", "").replace(" ","").replace(".","")
 			if phoneItem not in resultPhone:
 				resultPhone.append(phoneItem)
 
 		for addressItem in address:
 			resultAddress.append(addressItem)
 		
-		resultDate = date
+		resultDate.append(date)
 
 		item['url'] = response.url
 		item['phone'] = resultPhone
 		item['address'] = resultAddress
 		item['date'] = resultDate
+
 		return item
 
 	def parse_salebyowner_first_page(self, response):
@@ -298,8 +353,18 @@ class LeadSpider(CrawlSpider):
 		addressInfoList = []
 		addressInfoList = response.xpath('//div[@class="grid_XL grid_XL_gutter"]//h2/span[@itemprop="address"]/span/text()').extract()
 		contactInfoList = response.xpath('//div[@class="grid_MD-col grid_MD-col_aside"]//ol/li/ul/li/text()').extract()
-		date = str(nowTime[0]) + str(nowTime[1]) + str(nowTime[2])
-
+		
+		year = str(nowTime[0])
+		if nowTime[1] < 10:
+			month = "0" + str(nowTime[1])
+		else:
+			month = str(nowTime[1])
+		if nowTime[2] < 10:
+			day = "0" + str(nowTime[2])
+		else:
+			day = str(nowTime[2])
+		date = year + month + day
+		
 		phoneList = []
 		addressList = []
 
@@ -324,7 +389,7 @@ class LeadSpider(CrawlSpider):
 		resultDate.append(date)
 
 		item['url'] = response.url
-		item['date'] = date
+		item['date'] = resultDate
 		item['address'] = resultAddress
 		item['phone'] = resultPhone
 		return item

@@ -1,15 +1,27 @@
-# -*- coding: UTF-8 -*-
 #!/usr/bin/env python
-
+# -*- coding: UTF-8 -*-
+# 325 data = 111.2s
 import traceback
 from smtplib import SMTP
 from email.MIMEText import MIMEText
+import database_manager
 
 smtpHost = "smtp.qq.com"
 smtpPort = 587
 smtpUsername = "786186923@qq.com"
 smtpPassword = "0mmxlw20116464"
 sender = "786186923@qq.com"
+
+def getInfo():
+    messageInfoList = database_manager.getPhonesToBeMessagedAndRefreshMessenger()
+    for messageInfo in messageInfoList:
+        print "+++++++++++++++++++++++++"
+        print messageInfo['uid']
+        print messageInfo['phone']
+        print messageInfo['carrier']
+        print messageInfo['address']
+        print "+++++++++++++++++++++++++"
+
 
 def sendEmail(to, subject, content):
     retval = 1
@@ -50,4 +62,5 @@ def sendEmail(to, subject, content):
     return retval
 
 if __name__ == "__main__":
-    sendEmail("2027466229@txt.att.com", "Subject: Test", "Sent from Python")
+    #sendEmail("15989032981@139.com", "Subject: Test", "Sent from the other side of the earth")
+    getInfo()

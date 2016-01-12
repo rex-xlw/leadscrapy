@@ -21,9 +21,9 @@ def insertIntoDB(url):
 
 #MongoDB Version
 from pymongo import MongoClient
-URL = os.environ['OPENSHIFT_MONGODB_DB_URL']
-conn = MongoClient(URL)
-#conn = MongoClient()
+#URL = os.environ['OPENSHIFT_MONGODB_DB_URL']
+#conn = MongoClient(URL)
+conn = MongoClient()
 leadScrapyDB = conn.leadScrapy
 urlCol = leadScrapyDB.urlCol
 

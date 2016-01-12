@@ -1,5 +1,5 @@
 #!/bin/bash
 cd
-cd app-root/repo/Utils
+cd app-root/repo/leadScrapy
 PATH=$PATH:/usr/local/bin
 export PATH

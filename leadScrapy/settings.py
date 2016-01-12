@@ -65,8 +65,9 @@ DOWNLOADER_MIDDLEWARES = {
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     #'leadScrapy.pipelines.SomePipeline': 300,
-	'leadScrapy.pipelines.LeadscrapyPipeline': 800,
-	'leadScrapy.pipelines.FilterUrlPipline': 300,
+    'leadScrapy.pipelines.FilterUrlPipline': 300,
+   	'leadScrapy.pipelines.FilterInvalidPipeline': 500,
+	'leadScrapy.pipelines.InsertIntoDatabase': 800,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
