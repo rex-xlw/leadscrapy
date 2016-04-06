@@ -8,9 +8,9 @@ import database_manager
 
 smtpHost = "smtp.qq.com"
 smtpPort = 587
-smtpUsername = "786186923@qq.com"
-smtpPassword = "0mmxlw20116464"
-sender = "786186923@qq.com"
+smtpUsername = "sample@server.com"
+smtpPassword = "password"
+sender = "sample@server.com"
 
 def getInfo():
     messageInfoList = database_manager.getPhonesToBeMessagedAndRefreshMessenger()
