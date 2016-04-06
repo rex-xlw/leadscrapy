@@ -62,5 +62,5 @@ def sendEmail(to, subject, content):
     return retval
 
 if __name__ == "__main__":
-    #sendEmail("15989032981@139.com", "Subject: Test", "Sent from the other side of the earth")
+    #sendEmail("test@server.com", "Subject: Test", "Sent from the other side of the earth")
     getInfo()
