@@ -1,10 +1,10 @@
 import MySQLdb
 from DBUtils.PooledDB import PooledDB
 
-MYSQL_HOST = '192.185.151.118'
-MYSQL_DBNAME = 'movingen_lead_info'
-MYSQL_USER = 'movingen_manager'
-MYSQL_PASSWD = 'mysqltest'
+MYSQL_HOST = '***'
+MYSQL_DBNAME = '***'
+MYSQL_USER = '***'
+MYSQL_PASSWD = '***'
 
 class DbManager(object):
 	
